@@ -31,10 +31,10 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
+            '^/api/encuestas': {
                 target: 'https://localhost:7137/',
                 secure: false
-            }
+            },
         },
         port: 5173,
         https: {
