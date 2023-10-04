@@ -27,11 +27,12 @@ export default defineConfig({
     resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
+            /*"@": path.resolve(__dirname, "./src"),*/
         }
     },
     server: {
         proxy: {
-            '^/api/encuestas': {
+            '^/api': {
                 target: 'https://localhost:7137/',
                 secure: false
             },

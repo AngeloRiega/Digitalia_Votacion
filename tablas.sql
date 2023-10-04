@@ -16,9 +16,11 @@ CREATE TABLE Encuestas (
 -- Crear tabla de Opciones de Respuesta
 CREATE TABLE OpcionesRespuesta (
     Id INT AUTO_INCREMENT PRIMARY KEY,
+    EncuestaId INT NOT NULL,
     Texto VARCHAR(255) NOT NULL,
     Activo INT NOT NULL default 1,
-    FechaModificacion DATETIME ON UPDATE CURRENT_TIMESTAMP
+    FechaModificacion DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (EncuestaId) REFERENCES Encuestas(Id)
 );
 
 -- Crear tabla de Votos

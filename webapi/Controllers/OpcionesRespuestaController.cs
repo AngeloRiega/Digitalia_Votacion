@@ -35,10 +35,10 @@ namespace webapi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<OpcionRespuesta>> GetOpcionesRespuesta(int id)
         {
-          if (_context.OpcionesRespuesta == null)
-          {
-              return NotFound();
-          }
+            if (_context.OpcionesRespuesta == null)
+            {
+                return NotFound();
+            }
             var opcionesRespuesta = await _context.OpcionesRespuesta.FindAsync(id);
 
             if (opcionesRespuesta == null)
@@ -47,6 +47,25 @@ namespace webapi.Controllers
             }
 
             return opcionesRespuesta;
+        }
+
+        // GET: api/OpcionesRespuestas/5 (opcionesrespuesta activas por idencuesta)
+        [HttpGet("/api/OpcionesRespuestas/Encuesta/{id}")]
+        public async Task<ActionResult<IEnumerable<OpcionRespuesta>>> GetOpcionesRespuestaPorIdEncuesta(int id)
+        {
+            var encuesta = await _context.Encuestas
+                .Include(e => e.OpcionesRespuesta)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (encuesta == null)
+            {
+                return NotFound();
+            }
+
+            //Filtro por activas
+            var opcionesActivas = encuesta.OpcionesRespuesta.Where(opcion => opcion.Activo == 1).ToList();
+
+            return opcionesActivas;
         }
 
         // PUT: api/OpcionesRespuestas/5

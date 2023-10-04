@@ -81,16 +81,26 @@ namespace webapi.Controllers
         }
 
         // POST: api/Voto
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Voto>> PostVoto(Voto voto)
         {
-          if (_context.Votos == null)
-          {
-              return Problem("Entity set 'DigitaliaVotacionContext.Votos'  is null.");
-          }
-            _context.Votos.Add(voto);
+            if (_context.Votos == null)
+            {
+                return Problem("Entity set 'DigitaliaVotacionContext.Votos' is null.");
+            }
+
+            // Crea una instancia de Voto con los valores proporcionados
+            var nuevoVoto = new Voto
+            {
+                EncuestaId = voto.EncuestaId,
+                OpcionRespuestaId = voto.OpcionRespuestaId
+            };
+
+            _context.Votos.Add(nuevoVoto);
             await _context.SaveChangesAsync();
+
+            //Seteo fecha de voto, esto deberia traerse de la db, no van a coincidir las horas
+            voto.FechaVoto = DateTime.Now;
 
             return CreatedAtAction("GetVoto", new { id = voto.Id }, voto);
         }

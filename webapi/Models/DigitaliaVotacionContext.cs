@@ -34,7 +34,7 @@ public partial class DigitaliaVotacionContext : DbContext
             if (string.IsNullOrWhiteSpace(connectionString))
             {
                 //Llenar connectionString en el appsettings.json
-                throw new ArgumentNullException("mysql connectionString must not be null (Llenar connectionString en el appsettings.json)");
+                throw new ArgumentNullException("mysql connectionString must not be null (Llenar connectionString en el appsettings.json)", connectionString);
             }
 
             optionsBuilder.UseMySQL(connectionString);
@@ -89,18 +89,19 @@ public partial class DigitaliaVotacionContext : DbContext
             entity.Property(e => e.EncuestaId).HasColumnType("int(11)");
             entity.Property(e => e.FechaVoto)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("datetime");
+                .HasColumnType("datetime")
+                .ValueGeneratedOnAddOrUpdate();
             entity.Property(e => e.OpcionRespuestaId).HasColumnType("int(11)");
 
-            entity.HasOne(d => d.Encuesta).WithMany(p => p.Votos)
-                .HasForeignKey(d => d.EncuestaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("votos_ibfk_1");
+            //entity.HasOne(d => d.Encuesta).WithMany(p => p.Votos)
+            //    .HasForeignKey(d => d.EncuestaId)
+            //    .OnDelete(DeleteBehavior.Restrict)
+            //    .HasConstraintName("votos_ibfk_1");
 
-            entity.HasOne(d => d.OpcionRespuesta).WithMany(p => p.Votos)
-                .HasForeignKey(d => d.OpcionRespuestaId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("votos_ibfk_2");
+            //entity.HasOne(d => d.OpcionRespuesta).WithMany(p => p.Votos)
+            //    .HasForeignKey(d => d.OpcionRespuestaId)
+            //    .OnDelete(DeleteBehavior.Restrict)
+            //    .HasConstraintName("votos_ibfk_2");
         });
 
         OnModelCreatingPartial(modelBuilder);

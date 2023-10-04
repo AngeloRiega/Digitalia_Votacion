@@ -14,4 +14,6 @@ public partial class Encuesta
     public DateTime? FechaModificacion { get; set; }
 
     public virtual ICollection<Voto> Votos { get; set; } = new List<Voto>();
+
+    public virtual ICollection<OpcionRespuesta> OpcionesRespuesta { get; set; } = new List<OpcionRespuesta>();
 }
