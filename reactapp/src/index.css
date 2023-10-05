@@ -67,17 +67,18 @@
 }
  
 @layer base {
-  * {
+    * {
     @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+    }
+
+    body {
+        @apply bg-background bg-[#0071CE];
+    }
 }
 
 /* Centrar */
 #root {
-    padding: 10% 10%;
+    margin: 5%;
     /*display: flex;
     flex-direction: column;*/
     align-items: center;

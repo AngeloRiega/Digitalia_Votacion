@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,100 +25,54 @@ namespace webapi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Encuesta>>> GetEncuestas()
         {
-          if (_context.Encuestas == null)
-          {
-              return NotFound();
-          }
+            if (_context.Encuestas == null)
+            {
+                return NotFound();
+            }
             return await _context.Encuestas.ToListAsync();
         }
 
-        // GET: api/Encuestas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Encuesta>> GetEncuesta(int id)
+        // GET: api/Encuestas/5/votos (votos por id encuesta)
+        [HttpGet("{id}/votos")]
+        public ActionResult<IEnumerable<VotosEncuesta>> GetVotosPorIdEncuesta(int id)
         {
-          if (_context.Encuestas == null)
-          {
-              return NotFound();
-          }
-            var encuesta = await _context.Encuestas.FindAsync(id);
-
-            if (encuesta == null)
+            if (_context.VotosEncuesta == null)
             {
                 return NotFound();
             }
 
-            return encuesta;
-        }
+            var resultados = _context.VotosEncuesta.FromSqlInterpolated($"CALL ObtenerVotosEncuesta({id})").ToList();
 
-        // PUT: api/Encuestas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEncuesta(int id, Encuesta encuesta)
-        {
-            if (id != encuesta.Id)
+            if (resultados == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(encuesta).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EncuestaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(resultados);
         }
 
-        // POST: api/Encuestas
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Encuesta>> PostEncuesta(Encuesta encuesta)
-        {
-          if (_context.Encuestas == null)
-          {
-              return Problem("Entity set 'DigitaliaVotacionContext.Encuestas'  is null.");
-          }
-            _context.Encuestas.Add(encuesta);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetEncuesta", new { id = encuesta.Id }, encuesta);
-        }
-
-        // DELETE: api/Encuestas/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEncuesta(int id)
+        // GET: api/Encuestas/5/opcionesrespuesta (opcionesrespuesta activas por id encuesta)
+        [HttpGet("{id}/opcionesrespuesta")]
+        public async Task<ActionResult<IEnumerable<OpcionRespuesta>>> GetOpcionesRespuestaPorIdEncuesta(int id)
         {
             if (_context.Encuestas == null)
             {
                 return NotFound();
             }
-            var encuesta = await _context.Encuestas.FindAsync(id);
+
+            var encuesta = await _context.Encuestas
+                .Include(e => e.OpcionesRespuesta)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
             if (encuesta == null)
             {
                 return NotFound();
             }
 
-            _context.Encuestas.Remove(encuesta);
-            await _context.SaveChangesAsync();
+            //Filtro por activas
+            var opcionesActivas = encuesta.OpcionesRespuesta.Where(opcion => opcion.Activo == 1).ToList();
 
-            return NoContent();
-        }
-
-        private bool EncuestaExists(int id)
-        {
-            return (_context.Encuestas?.Any(e => e.Id == id)).GetValueOrDefault();
+            return Ok(opcionesActivas);
         }
     }
 }

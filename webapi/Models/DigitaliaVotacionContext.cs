@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using webapi.Models;
 
 namespace webapi.Models;
 
@@ -18,6 +19,8 @@ public partial class DigitaliaVotacionContext : DbContext
     public virtual DbSet<Encuesta> Encuestas { get; set; }
 
     public virtual DbSet<OpcionRespuesta> OpcionesRespuesta { get; set; }
+
+    public virtual DbSet<VotosEncuesta> VotosEncuesta { get; set; }
 
     public virtual DbSet<Voto> Votos { get; set; }
 
@@ -65,10 +68,13 @@ public partial class DigitaliaVotacionContext : DbContext
 
             entity.ToTable("opcionesrespuesta");
 
+            entity.HasIndex(e => e.EncuestaId, "EncuestaId");
+
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.Activo)
                 .HasDefaultValueSql("'1'")
                 .HasColumnType("int(11)");
+            entity.Property(e => e.EncuestaId).HasColumnType("int(11)");
             entity.Property(e => e.FechaModificacion)
                 .ValueGeneratedOnAddOrUpdate()
                 .HasColumnType("datetime");
@@ -89,19 +95,8 @@ public partial class DigitaliaVotacionContext : DbContext
             entity.Property(e => e.EncuestaId).HasColumnType("int(11)");
             entity.Property(e => e.FechaVoto)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("datetime")
-                .ValueGeneratedOnAddOrUpdate();
+                .HasColumnType("datetime");
             entity.Property(e => e.OpcionRespuestaId).HasColumnType("int(11)");
-
-            //entity.HasOne(d => d.Encuesta).WithMany(p => p.Votos)
-            //    .HasForeignKey(d => d.EncuestaId)
-            //    .OnDelete(DeleteBehavior.Restrict)
-            //    .HasConstraintName("votos_ibfk_1");
-
-            //entity.HasOne(d => d.OpcionRespuesta).WithMany(p => p.Votos)
-            //    .HasForeignKey(d => d.OpcionRespuestaId)
-            //    .OnDelete(DeleteBehavior.Restrict)
-            //    .HasConstraintName("votos_ibfk_2");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Encuestas from "@/components/Encuestas";
-import { Label } from "@/components/ui/Label/Label";
 
 export default class App extends Component {
     constructor(props) {
@@ -23,10 +22,7 @@ export default class App extends Component {
         }
         else
             return (
-                <div>
-                    <Label className="text-3xl">Encuestas</Label>
-                    <Encuestas encuestas={encuestas} />
-                </div>
+                <Encuestas encuestas={encuestas} />
             );
     }
 
@@ -34,7 +30,7 @@ export default class App extends Component {
         fetch('/api/encuestas')
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error('Conexion con el api sin exito. :7137');
+                    throw new Error('No hay conexion con el backend, refrescar o verificar mysql.');
                 }
                 return response.json();
             })

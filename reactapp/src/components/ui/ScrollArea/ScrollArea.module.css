@@ -43,7 +43,7 @@
 }
 
     .ScrollAreaScrollbar:hover {
-        @apply flex p-5;
+        @apply flex p-4;
     }
 
 
@@ -71,7 +71,7 @@
 
     .ScrollAreaThumb::before {
         content: ' ';
-        @apply absolute w-full h-full origin-center transform bg-indigo-900 rounded-lg cursor-pointer top-1/2 left-1/2;
+        @apply absolute w-full h-full origin-center transform bg-[#A0D5E3] rounded-lg cursor-pointer top-1/2 left-1/2;
         transform: translate(-50%, -50%);
         min-width: 14px;
         min-height: 14px;
