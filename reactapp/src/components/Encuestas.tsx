@@ -29,10 +29,9 @@ const Encuestas = ({ encuestas }) => {
     const [activeTab, setActiveTab] = useState("encuestas");
     const [resultadosData, setResultadosData] = useState([]);
 
+    // Fetch cuando selecciono el tab de resultados
     useEffect(() => {
-        // Fetch data when the "resultados" tab becomes active
         if (activeTab === "resultados" && selectedEncuestaId !== null) {
-            
             fetch(`api/Encuestas/${selectedEncuestaId}/votos`)
                 .then((response) => {
                     if (!response.ok) {
@@ -41,7 +40,6 @@ const Encuestas = ({ encuestas }) => {
                     return response.json();
                 })
                 .then((data) => {
-                    // Set the resultadosData state with the fetched data
                     setResultadosData(data);
                 })
                 .catch((error) => {
@@ -107,10 +105,10 @@ const Encuestas = ({ encuestas }) => {
                         ),
                     })
 
-                    // Cierro la ventana y limpio ids
-                    //setSelectedEncuestaId(null);
+                    // Limpio ids
                     setSelectedOpcionRespuestaId(null);
 
+                    // Cierro la ventana
                     setOpenDialogVotacion(false);
                 })
                 .catch((error) => {
@@ -162,7 +160,6 @@ const Encuestas = ({ encuestas }) => {
         }
         else {
             // Limpio los ids
-            //setSelectedEncuestaId(null);
             setSelectedOpcionRespuestaId(null);
         }
 
