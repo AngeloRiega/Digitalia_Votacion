@@ -52,15 +52,15 @@ Instrucciones y Entregables:
 ## Screenshots
 - Listado de encuestas
 
-![Encuestas](./public/img/encuestas.png)
+![Encuestas](./reactapp/public/img/encuestas.png)
 
 - Pantalla(Dialog) de votación
 
-![Votacion](./public/img/votacion.png)
+![Votacion](./reactapp/public/img/votacion.png)
 
 - Pantalla de resultados
 
-![Resultados](./public/img/resultados.png)
+![Resultados](./reactapp/public/img/resultados.png)
 
 
 ## Setup
